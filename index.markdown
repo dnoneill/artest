@@ -8,6 +8,7 @@ layout: null
 <!-- we import arjs version without NFT but with marker + location based support -->
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 <body style="margin : 0px; overflow: hidden;">
+	<div id="arview"></div>
     <a-scene embedded arjs>
     {% for item in site.data.arclues %}
     	{% if item.viewtype == 'marker' %}
@@ -17,7 +18,7 @@ layout: null
 	    	{% assign tag = 'a-nft' %}
 	    	{% assign tagtype = 'nft' %}
     	{% endif %}
-	    <{{tag}} url="{{item.marker}}" type="{{tagtype}}">
+	    <{{tag}} url="{{item.marker}}" type="{{tagtype}}" class="clue" data-index-number="{{item.cluenumber}}">
 	    	{% if item.type == 'entity' %}
 		        <a-entity
 		        position="0 -1 0"
@@ -29,4 +30,23 @@ layout: null
     {% endfor %}
     <a-entity camera></a-entity>
     </a-scene>
+
+    <script>
+    var clues = document.getElementsByClassName('clue');
+   	for (var i=0; i<clues.length; i++){
+   		const anchorRef = clues[i];
+   		const arview = document.getElementById('arview')
+	    anchorRef.addEventListener("markerFound", (e)=>{
+	      arview.innerHTML = 'test'
+	      arview.style.display = 'block';
+	      alert("{{site.data.arclues[i]}}")
+	      var cluenumb = e.target.dataset.indexNumber;
+	      alert(cluenumb)
+	    })
+	    anchorRef.addEventListener("markerLost", (e)=>{
+	      arview.innerHTML = ''
+	      arview.style.display = 'none';
+	    })
+   	 }
+   	</script>
 </body>
