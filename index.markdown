@@ -31,22 +31,35 @@ layout: null
     <a-entity camera></a-entity>
     </a-scene>
 
-    <script>
+    
+</body>
+
+<style>
+	#arview {
+		z-index: 2000;
+		top:50%;
+		background: white;
+		color: black;
+		right: 50%;
+		position: absolute;
+    display: none;
+	}
+</style>
+<script>
     var clues = document.getElementsByClassName('clue');
    	for (var i=0; i<clues.length; i++){
    		const anchorRef = clues[i];
    		const arview = document.getElementById('arview')
 	    anchorRef.addEventListener("markerFound", (e)=>{
-	      arview.innerHTML = 'test'
-	      arview.style.display = 'block';
+	      arview.innerHTML = "{{site.data.arclues[i]}}"
 	      alert("{{site.data.arclues[i]}}")
+	      alert(e.target)
+	      alert(e.target.dataset)
 	      var cluenumb = e.target.dataset.indexNumber;
 	      alert(cluenumb)
 	    })
 	    anchorRef.addEventListener("markerLost", (e)=>{
-	      arview.innerHTML = ''
 	      arview.style.display = 'none';
 	    })
    	 }
    	</script>
-</body>
