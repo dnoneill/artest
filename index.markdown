@@ -11,11 +11,13 @@ layout: null
     <a-scene embedded arjs>
     {% for item in site.data.arclues %}
 	    <a-marker url="{{item.marker}}" type="pattern">
-	        <a-entity
-	        position="0 -1 0"
-	        scale="0.05 0.05 0.05"
-	        gltf-model="https://cdn.aframe.io/test-models/models/glTF-2.0/virtualcity/VC.gltf"
-	        ></a-entity>
+	    	{% if item.type == 'entity'}
+		        <a-entity
+		        position="0 -1 0"
+		        scale="0.05 0.05 0.05"
+		        gltf-model="{{item.typeurl}}"
+		        ></a-entity>
+	        {% endif %}
 	    </a-marker>
     {% endfor %}
     <a-entity camera></a-entity>
