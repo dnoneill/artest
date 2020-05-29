@@ -18,7 +18,7 @@ layout: null
 	    	{% assign tag = 'a-nft' %}
 	    	{% assign tagtype = 'nft' %}
     	{% endif %}
-	    <{{tag}} url="{{item.marker}}" type="{{tagtype}}" class="clue" data-index-number="{{item.cluenumber}}">
+	    <{{tag}} url="{{item.marker}}" type="{{tagtype}}" class="clue" data-index-number="{{item.order}}">
 	    	{% if item.type == 'entity' %}
 		        <a-entity
 		        position="0 -1 0"
@@ -42,24 +42,25 @@ layout: null
 		color: black;
 		right: 50%;
 		position: absolute;
-    display: none;
 	}
 </style>
 <script>
     var clues = document.getElementsByClassName('clue');
+    const siteclues = {{site.data.arclues | jsonify}}
+    console.log(siteclues)
+    console.log(clues)
    	for (var i=0; i<clues.length; i++){
    		const anchorRef = clues[i];
    		const arview = document.getElementById('arview')
 	    anchorRef.addEventListener("markerFound", (e)=>{
-	      arview.innerHTML = "{{site.data.arclues[i]}}"
-	      alert("{{site.data.arclues[i]}}")
-	      alert(e.target)
-	      alert(e.target.dataset)
 	      var cluenumb = e.target.dataset.indexNumber;
-	      alert(cluenumb)
+	      const html = siteclues.filter(element => element['order'] == cluenumb)[0]
+	      arview.innerHTML = html['message'];
+	      
+	      console.log(html);
 	    })
 	    anchorRef.addEventListener("markerLost", (e)=>{
-	      arview.style.display = 'none';
+	      arview.innerHTML = ""
 	    })
    	 }
    	</script>
