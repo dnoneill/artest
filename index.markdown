@@ -9,7 +9,7 @@ layout: null
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 <body style="margin : 0px; overflow: hidden;">
     <a-scene embedded arjs>
-    {% for item in site.data %}
+    {% for item in site.data.arclues %}
 	    <a-marker url="{{item.marker}}" type="pattern">
 	        <a-entity
 	        position="0 -1 0"
