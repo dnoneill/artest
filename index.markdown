@@ -10,14 +10,14 @@ layout: null
 <body style="margin : 0px; overflow: hidden;">
     <a-scene embedded arjs>
     {% for item in site.data %}
-    <a-marker url="{{item.marker}}">
-        <a-entity
-        position="0 -1 0"
-        scale="0.05 0.05 0.05"
-        gltf-model="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
-        ></a-entity>
+	    <a-marker url="{{item.marker}}" type="pattern">
+	        <a-entity
+	        position="0 -1 0"
+	        scale="0.05 0.05 0.05"
+	        gltf-model="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
+	        ></a-entity>
+	    </a-marker>
     {% endfor %}
-    </a-marker>
     <a-entity camera></a-entity>
     </a-scene>
 </body>
