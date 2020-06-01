@@ -4,11 +4,19 @@
 
 layout: null
 ---
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.7.3/localforage.js" integrity="sha256-3NP4l3uenVxIZ0vLGnUjjObImjaJltaSzAHaGUr+yDA=" crossorigin="anonymous"></script>
 <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
 <!-- we import arjs version without NFT but with marker + location based support -->
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 <body style="margin : 0px; overflow: hidden;">
-	<div id="arview"></div>
+	<script id="siteclues">
+		{{site.data.arclues | jsonify}}
+	</script>
+	<div id="arview">
+		<span v-html="text"></span>
+    </div>
+            
     <a-scene embedded arjs>
     {% for item in site.data.arclues %}
     	{% if item.viewtype == 'marker' %}
@@ -31,7 +39,7 @@ layout: null
     <a-entity camera></a-entity>
     </a-scene>
 
-    
+    <script src="index.js"></script>
 </body>
 
 <style>
@@ -44,23 +52,3 @@ layout: null
 		position: absolute;
 	}
 </style>
-<script>
-    var clues = document.getElementsByClassName('clue');
-    const siteclues = {{site.data.arclues | jsonify}}
-    console.log(siteclues)
-    console.log(clues)
-   	for (var i=0; i<clues.length; i++){
-   		const anchorRef = clues[i];
-   		const arview = document.getElementById('arview')
-	    anchorRef.addEventListener("markerFound", (e)=>{
-	      var cluenumb = e.target.dataset.indexNumber;
-	      const html = siteclues.filter(element => element['order'] == cluenumb)[0]
-	      arview.innerHTML = html['message'];
-	      
-	      console.log(html);
-	    })
-	    anchorRef.addEventListener("markerLost", (e)=>{
-	      arview.innerHTML = ""
-	    })
-   	 }
-   	</script>
