@@ -13,9 +13,9 @@ layout: null
 	<script id="siteclues">
 		{{site.data.arclues | jsonify}}
 	</script>
-	<div id="arview">
-		<span v-html="text"></span>
-    </div>
+	<div id="app">
+	<arview apiurl="{{site.apiurl}}"></arview>
+	</div>
             
     <a-scene embedded arjs>
     {% for item in site.data.arclues %}

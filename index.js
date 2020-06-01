@@ -1,10 +1,13 @@
-var app = new Vue({
-  el: '#arview',
-  data: {
-    siteclues: {},
-    text: '',
-    currentclue: 0,
-    highestclue: 100
+Vue.component('arview', {
+  props: ['apiurl'],
+  template: '<div id="arview">{{ text }}</div>',
+  data: function() {
+  	return {
+  	    siteclues: {},
+  	    text: '',
+  	    currentclue: 0,
+  	    highestclue: 100
+  	}
   },
   mounted() {
   	var clues = document.getElementsByClassName('clue');
@@ -38,17 +41,28 @@ var app = new Vue({
   		localforage.getItem('progress', function (err, value) {
   			if (vue.currentclue == vue.highestclue) {
   				vue.text = 'FINISHED'
-  			} else if (vue.currentclue == value+1){
+  			} else if (vue.currentclue > value+1) {
+  				alert(`You have skiped clue #${value+1}`)
+  			}else {
   				vue.successClue()
-  			} 
+  			}
   		})
   	}, 
+  	sendData: function() {
+  		alert('sendData')
+  	},
   	successClue: function(e) {
   		const html = this.siteclues.filter(element => element['order'] == this.currentclue)[0]
 	    this.text = html['message'];
-	    console.log(this.text)
 	    localforage.setItem('progress', this.currentclue)
-	    console.log(this.currentclue)
+	    console.log(this.apiurl)
+	    if (this.apiurl) {
+	    	this.sendData();
+	    }
   	}
   }
+})
+
+var app = new Vue({
+  el: '#app'
 })
