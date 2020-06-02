@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 
 <html>
     <head>
@@ -10,8 +10,31 @@
         <a-scene vr-mode-ui='enabled: false' embedded arjs='sourceType: webcam; debugUIEnabled: false'>
             <a-camera gps-projected-camera='simulateLatitude: 51.049; simulateLongitude: -0.723' rotation-reader></a-camera>
             <a-box gps-projected-entity-place='latitude: 51.0486; longitude: -0.7226' material='color: red' scale='10 10 10'></a-box>
-            <a-box gps-projected-entity-place='latitude: 51.0491; longitude: -0.7246' material='color: yellow' scale='10 10 10'></a-box>
+            <a-box gps-projected-entity-place='latitude: 51.0491; longitude: -0.7246' material='color: yellow' scale='10 10 10' id="yellow"></a-box>
             <a-box gps-projected-entity-place='latitude: 51.0489; longitude: -0.7240' position='0 10 0' material='color: green' scale='10 10 10'></a-box>
         </a-scene>
+        <script>
+        const anchorRef = document.getElementById('yellow');
+        alert(anchorRef)
+        anchorRef.addEventListener("gps-entity-place-loaded", (e)=>{
+            alert('loaded')
+            alert(e)
+        })
+        anchorRef.addEventListener("gps-camera-origin-coord-set", (e)=>{
+            alert('set')
+            alert(e)
+        })
+        anchorRef.addEventListener("gps-entity-place-update-positon", (e)=>{
+            alert('update')
+            alert(e)
+        })
+        anchorRef.addEventListener("gps-entity-place-added", (e)=>{
+            alert('added')
+            alert(e)
+        })
+        anchorRef.addEventListener("markerFound", (e)=>{
+          alert('marker')   
+        })
+    </script>
     </body>
 </html>
