@@ -11,10 +11,35 @@
 
 <body style='margin: 0; overflow: hidden;'>
     <a-scene>
-        <a-text value="2This will always face the user." look-at="[gps-camera]" scale="75 75 75"
+        <a-text id="texttest" value="2This will always face the user." look-at="[gps-camera]" scale="75 75 75"
             gps-entity-place="latitude: 1; longitude: 12;"></a-text>
         <a-camera gps-camera="simulateLatitude: 1; simulateLongitude: 12" rotation-reader>
 		</a-camera>
 	</a-scene>
+
+    <script>
+        const anchorRef = document.getElementById('texttest')
+        anchorRef.addEventListener("gps-entity-place-loaded", (e)=>{
+            alert('loaded')
+            alert(e)
+        })
+        anchorRef.addEventListener("gps-camera-origin-coord-set", (e)=>{
+            alert('set')
+            alert(e)
+        })
+        anchorRef.addEventListener("gps-entity-place-update-positon", (e)=>{
+            alert('update')
+            alert(e)
+        })
+        anchorRef.addEventListener("gps-entity-place-added", (e)=>{
+            alert('added')
+            alert(e)
+        })
+        anchorRef.addEventListener("markerFound", (e)=>{
+          alert('marker')   
+        })
+    </script>
 </body>
+
+
 
