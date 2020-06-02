@@ -12,9 +12,10 @@
     AFRAME.registerComponent('clickhandler', {
         init: function() {
             const el = this.el;
+            alert(el.toString())
             this.el.addEventListener('click', () => {
                 alert('Clicked!')
-                alert(el.visible)
+                alert(el.toString())
             });
     },
     tick: function() {
