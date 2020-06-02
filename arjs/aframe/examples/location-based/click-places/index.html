@@ -11,6 +11,7 @@
 <script>
     AFRAME.registerComponent('clickhandler', {
         init: function() {
+            alert('init')
             this.el.addEventListener('click', () => {
                 alert('Clicked!')
             });
