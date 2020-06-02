@@ -12,13 +12,14 @@
     AFRAME.registerComponent('clickhandler', {
         init: function() {
             const el = this.el;
-            alert(el.toString())
+            alert(el.outerHTML)
             this.el.addEventListener('click', () => {
                 alert('Clicked!')
-                alert(el.toString())
+                alert(el.outerHTML)
             });
     },
     tick: function() {
+        console.log(this.el.outerHTML)
         if (this.el.visible) {
             alert('is visible via tick')
         }
