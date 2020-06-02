@@ -18,7 +18,8 @@
 	</a-scene>
 
     <script>
-        const anchorRef = document.getElementById('texttest')
+        const anchorRef = document.getElementById('texttest');
+        alert(anchorRef)
         anchorRef.addEventListener("gps-entity-place-loaded", (e)=>{
             alert('loaded')
             alert(e)
