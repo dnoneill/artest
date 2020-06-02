@@ -11,11 +11,14 @@
 <script>
     AFRAME.registerComponent('clickhandler', {
         init: function() {
-            alert('init')
             this.el.addEventListener('click', () => {
                 alert('Clicked!')
             });
-    }});
+    },
+    update: function() {
+        alert(JSON.stringify(this.el))
+    }
+});
 </script>
 
 <body style='margin: 0; overflow: hidden;'>
