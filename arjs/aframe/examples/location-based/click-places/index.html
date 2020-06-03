@@ -14,6 +14,8 @@
             const el = this.el;
             this.el.addEventListener('click', () => {
                 alert('Clicked!')
+                const distance = el.getAttribute('distance');
+                alert(distance)
             });
     },
     tick: function() {
