@@ -11,15 +11,16 @@
 <script>
     AFRAME.registerComponent('clickhandler', {
         init: function() {
-            const el = this.el;
+            var el = this.el;
             this.el.addEventListener('click', () => {
                 alert('Clicked!')
-                const distance = el.getAttribute('distance');
+                var distance = el.getAttribute('distance');
                 alert(distance)
             });
     },
     tick: function() {
-        const distance = this.el.getAttribute('distance');
+        var distance = this.el.getAttribute('distance');
+        console.log(distance)
         if (distance && distance < .5) {
             alert('is visible via tick')
         }
