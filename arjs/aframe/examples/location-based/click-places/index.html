@@ -21,7 +21,8 @@
     tick: function() {
         var distance = this.el.getAttribute('distance');
         console.log(distance)
-        if (distance && distance < .5) {
+        if (distance) {
+            alert(distance)
             alert('is visible via tick')
         }
     }
