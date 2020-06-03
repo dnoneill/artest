@@ -13,8 +13,8 @@
         init: function() {
             var el = this.el;
             this.el.addEventListener('click', () => {
-                alert('Clicked!')
                 var distance = el.getAttribute('distance');
+                alert(el.outerHTML)
                 alert(distance)
             });
     },
