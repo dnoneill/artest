@@ -39,7 +39,7 @@
 
         <a-box
             clickhandler
-            material="color: red;"
+            material="color: red;" id="redbox"
             scale="10 10 10"
             gps-entity-place="latitude: 51.0491; longitude: -0.7246;">
         </a-box>
@@ -53,4 +53,9 @@
         <a-camera gps-camera="simulateLatitude: 51.049; simulateLongitude: -0.723" rotation-reader>
 		</a-camera>
 	</a-scene>
+    <script>
+        document.getElementById('redbox').addEventListener("gps-entity-place-update-positon", (e)=>{
+            console.log(e)  
+        })
+    </script>
 </body>
