@@ -61,9 +61,6 @@
             console.log('update position')
             console.log(e)  
         })
-        window.addEventListener("gps-camera-update-positon", (e)=>{
-            console.log(e)  
-            console.log('camera position')
-        })
+       window.dispatchEvent(new CustomEvent('gps-camera-update-position', { detail: { position: 'this.currentCoords', origin: this.originCoords } }));
     </script>
 </body>
