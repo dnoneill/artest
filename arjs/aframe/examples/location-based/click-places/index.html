@@ -23,6 +23,7 @@
     tick: function() {
         var distance = this.el.getAttribute('distance');
         console.log(distance)
+        window.dispatchEvent(new CustomEvent('gps-camera-update-position'))
         // window.dispatchEvent('gps-camera-update-position');
     }
 });
@@ -59,5 +60,6 @@
         window.addEventListener('gps-camera-update-position', function (ev) {
             console.log(ev)
         })
+        window.dispatchEvent(new CustomEvent('gps-camera-update-position'))
     </script>
 </body>
