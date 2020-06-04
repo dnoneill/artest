@@ -55,7 +55,15 @@
 	</a-scene>
     <script>
         document.getElementById('redbox').addEventListener("gps-entity-place-update-positon", (e)=>{
-            alert(e)  
+            console.log(e)  
+        })
+        window.addEventListener("gps-entity-place-update-positon", (e)=>{
+            console.log('update position')
+            console.log(e)  
+        })
+        window.addEventListener("gps-camera-update-positon", (e)=>{
+            console.log(e)  
+            console.log('camera position')
         })
     </script>
 </body>
