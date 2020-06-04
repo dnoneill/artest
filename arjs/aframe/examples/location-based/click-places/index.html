@@ -22,8 +22,8 @@
     },
     tick: function() {
         var distance = this.el.getAttribute('distance');
+        console.log(this.el)
         console.log(distance)
-        window.dispatchEvent(new CustomEvent('gps-camera-update-position'))
         // window.dispatchEvent('gps-camera-update-position');
     }
 });
@@ -57,7 +57,8 @@
         document.getElementById('redbox').addEventListener("gps-entity-place-update-positon", (e)=>{
             console.log(e)  
         })
-        window.addEventListener('gps-camera-update-position', function (ev) {
+        document.getElementsByTagName('a-camera')[0].addEventListener('gps-camera-update-position', function (ev) {
+            console.log(this)
             console.log(ev)
         })
         window.dispatchEvent(new CustomEvent('gps-camera-update-position'))
