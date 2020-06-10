@@ -16,7 +16,9 @@ layout: null
 	<div id="app">
 	<arview apiurl="{{site.apiurl}}"></arview>
 	</div>
-            
+            <a-scene embedded arjs>
+      <a-entity camera id="camera"></a-entity>
+      </a-scene>
     <script src="index.js"></script>
 </body>
 
