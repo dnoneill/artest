@@ -41,11 +41,10 @@ Vue.component('arview', {
       const clue = this.siteclues[i];
       const innerelement = this.buildInnerElement(clue);
       if (clue['viewtype'] != 'location'){
-        let text = document.createElement(`a-${clue['viewtype']}`);
+        const newelement = document.createElement(`a-${clue['viewtype']}`);
         var itemtype = clue['viewtype'] == 'marker' ? 'pattern' : clue['viewtype'];
-        text.setAttribute('data-index-number', clue['order']); 
+        const text = this.setDefaultValues(newelement, clue);
         text.setAttribute('url', clue['marker']);
-        text.setAttribute('class', 'clues'); 
         text.setAttribute('type', itemtype); 
         text.appendChild(innerelement);
         ascene.insertBefore(text, camera)
@@ -59,15 +58,20 @@ Vue.component('arview', {
           vue.text = ''
         })
       } else {        
-        innerelement.setAttribute('class', 'clues');
-        innerelement.setAttribute('data-index-number', clue['order']); 
-        innerelement.setAttribute('gps-entity-place', `latitude: ${clue['latitude']}; longitude: ${clue['longitude']};`)
+        const element = this.setDefaultValues(innerelement, clue);
+        element.setAttribute('gps-entity-place', `latitude: ${clue['latitude']}; longitude: ${clue['longitude']};`)
         ascene.insertBefore(innerelement, camera)
       }
       this.gestures();
     }
   },
   methods: {
+    setDefaultValues: function(element, clue) {
+       element.setAttribute('emitevents', 'true');
+       element.setAttribute('class', 'clues');
+       element.setAttribute('data-index-number', clue['order']); 
+       return element;
+    },
   	checkClue: function() {
   		var vue = this;
   		localforage.getItem('progress', function (err, value) {
@@ -81,13 +85,12 @@ Vue.component('arview', {
   		})
   	}, 
     gestures: function() {
-      console.log('gestures')
       var vue = this;
       document.getElementsByTagName('a-scene')[0].addEventListener("onefingermove", vue.handleRotation);
-      console.log('after gestures')
     },
     handleRotation(event) {
       console.log('handleRotation')
+      console.log(event)
       el.object3D.rotation.y +=
         event.detail.positionChange.x * rotationFactor;
 
@@ -100,7 +103,7 @@ Vue.component('arview', {
     buildInnerElement: function(clue) {  
       let innerelement = `<a-${clue['type']}`
       if (clue['typeurl'] && clue['type'] == 'entity') {
-        innerelement += ` gltf-model="${clue['typeurl']}"`
+        innerelement += ` gltf-model="${clue['typeurl']}" gesture-handler="minScale: 0.25; maxScale: 10"`
       } else if (clue['typeurl']) {
         innerelement += ` href="${clue['typeurl']}"`
       }
