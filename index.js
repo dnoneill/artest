@@ -11,7 +11,7 @@ Vue.config.ignoredElements = [
 
 Vue.component('arview', {
   props: ['apiurl'],
-  template: `<div><a-scene embedded arjs>
+  template: `<div><a-scene embedded arjs gesture-detector>
       <a-entity camera id="camera"></a-entity>
       </a-scene><div id="arview">{{ text }}</div></div>`,
   data: function() {
@@ -64,8 +64,6 @@ Vue.component('arview', {
         innerelement.setAttribute('gps-entity-place', `latitude: ${clue['latitude']}; longitude: ${clue['longitude']};`)
         ascene.insertBefore(innerelement, camera)
       }
-      console.log(ascene)
-      this.gestures();
     }
   },
   methods: {
@@ -80,21 +78,7 @@ Vue.component('arview', {
   				vue.successClue()
   			}
   		})
-  	}, 
-    gestures: function() {
-      console.log('gestures')
-      var vue = this;
-      document.getElementsByTagName('a-scene')[0].addEventListener("onefingermove", vue.handleRotation);
-      console.log('after gestures')
-    },
-    handleRotation(event) {
-      console.log('handleRotation')
-      el.object3D.rotation.y +=
-        event.detail.positionChange.x * rotationFactor;
-
-      el.object3D.rotation.x +=
-        event.detail.positionChange.y * rotationFactor;
-    },
+  	},
   	sendData: function() {
   		alert('sendData')
   	},
