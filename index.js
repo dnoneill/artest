@@ -81,7 +81,10 @@ Vue.component('arview', {
   		})
   	}, 
     gestures: function() {
-      document.getElementsByTagName('a-scene')[0].addEventListener("onefingermove", this.handleRotation);
+      console.log('gestures')
+      var vue = this;
+      document.getElementsByTagName('a-scene')[0].addEventListener("onefingermove", vue.handleRotation);
+      console.log('after gestures')
     },
     handleRotation(event) {
       console.log('handleRotation')
