@@ -53,9 +53,11 @@ Vue.component('arview', {
           var cluenumb = parseInt(e.target.dataset.indexNumber);
           this.currentclue = cluenumb;
           vue.checkClue(e)     
+          console.log('marker found')
         })
         text.addEventListener("markerLost", (e)=>{
           vue.text = ''
+          console.log('marker lost')
         })
       } else {        
         const element = this.setDefaultValues(innerelement, clue);
