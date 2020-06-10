@@ -17,28 +17,6 @@ layout: null
 	<arview apiurl="{{site.apiurl}}"></arview>
 	</div>
             
-    <a-scene embedded arjs>
-    {% for item in site.data.arclues %}
-    	{% if item.viewtype == 'marker' %}
-	    	{% assign tag = 'a-marker' %}
-	    	{% assign tagtype = 'pattern' %}
-    	{% elsif item.viewtype == 'image' %}
-	    	{% assign tag = 'a-nft' %}
-	    	{% assign tagtype = 'nft' %}
-    	{% endif %}
-	    <{{tag}} url="{{item.marker}}" type="{{tagtype}}" class="clue" data-index-number="{{item.order}}">
-	    	{% if item.type == 'entity' %}
-		        <a-entity
-		        position="0 -1 0"
-		        scale="0.05 0.05 0.05"
-		        gltf-model="{{item.typeurl}}"
-		        ></a-entity>
-	        {% endif %}
-	    </{{tag}}>
-    {% endfor %}
-    <a-entity camera></a-entity>
-    </a-scene>
-
     <script src="index.js"></script>
 </body>
 
