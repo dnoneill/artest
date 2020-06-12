@@ -21,24 +21,6 @@ Vue.component('arview', {
         >
         </a-asset-item>
       </a-assets>
-
-      <a-marker
-        preset="hiro"
-        raycaster="objects: .clickable"
-        emitevents="true"
-        cursor="fuse: false; rayOrigin: mouse;"
-        id="markerA"
-      >
-        <a-entity
-          id="bowser-model"
-          gltf-model="#bowser"
-          position="0 0 0"
-          scale="0.05 0.05 0.05"
-          class="clickable"
-          gesture-handler
-        >
-        </a-entity>
-      </a-marker>
       <a-entity camera id="camera"></a-entity>
       </a-scene><div id="arview">{{ text }}</div></div>`,
   data: function() {
@@ -91,7 +73,26 @@ Vue.component('arview', {
         element.setAttribute('gps-entity-place', `latitude: ${clue['latitude']}; longitude: ${clue['longitude']};`)
         ascene.insertBefore(innerelement, camera)
       }
-      this.gestures();
+      const testelement = document.createElement('div')
+      testelement.innerHTML = `<a-marker
+        preset="hiro"
+        raycaster="objects: .clickable"
+        emitevents="true"
+        cursor="fuse: false; rayOrigin: mouse;"
+        id="markerA"
+      >
+        <a-entity
+          id="bowser-model"
+          gltf-model="#bowser"
+          position="0 0 0"
+          scale="0.05 0.05 0.05"
+          class="clickable"
+          gesture-handler
+        >
+        </a-entity>
+      </a-marker>`
+      console.log(testelement.firstChild)
+      ascene.insertBefore(testelement.firstChild, camera)
     }
   },
   methods: {
@@ -113,10 +114,6 @@ Vue.component('arview', {
   			}
   		})
   	}, 
-    gestures: function() {
-      var vue = this;
-      document.getElementsByTagName('a-scene')[0].addEventListener("onefingermove", vue.handleRotation);
-    },
     handleRotation(event) {
       console.log('handleRotation')
       console.log(event)
