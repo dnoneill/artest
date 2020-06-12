@@ -55,7 +55,7 @@ Vue.component('arview', {
         const text = this.setDefaultValues(newelement, clue);
         text.setAttribute('url', clue['marker']);
         text.setAttribute('type', itemtype); 
-        text.setAttribute('registerevents', '')
+        text.setAttribute('registerevents', '');
         text.appendChild(innerelement);
         ascene.insertBefore(text, camera)
       } else {        
@@ -63,26 +63,6 @@ Vue.component('arview', {
         element.setAttribute('gps-entity-place', `latitude: ${clue['latitude']}; longitude: ${clue['longitude']};`)
         ascene.insertBefore(innerelement, camera)
       }
-      const testelement = document.createElement('div')
-      testelement.innerHTML = `<a-marker
-        preset="hiro"
-        raycaster="objects: .clickable"
-        emitevents="true"
-        cursor="fuse: false; rayOrigin: mouse;"
-        id="markerA"
-      >
-        <a-entity
-          id="bowser-model"
-          gltf-model="#bowser"
-          position="0 0 0"
-          scale="0.05 0.05 0.05"
-          class="clickable"
-          gesture-handler
-        >
-        </a-entity>
-      </a-marker>`
-      console.log(testelement.firstChild)
-      ascene.insertBefore(testelement.firstChild, camera)
     }
   },
   methods: {
@@ -90,6 +70,7 @@ Vue.component('arview', {
        element.setAttribute('emitevents', 'true');
        element.setAttribute('class', 'clues');
        element.setAttribute('data-index-number', clue['order']); 
+       element.setAttribute('gesture-handler', '');
        return element;
     },
     markers: function() {
@@ -144,15 +125,19 @@ Vue.component('arview', {
     buildInnerElement: function(clue) {  
       let innerelement = `<a-${clue['type']}`
       if (clue['typeurl'] && clue['type'] == 'entity') {
-        innerelement += ` gltf-model="${clue['typeurl']}" gesture-handler="minScale: 0.25; maxScale: 10"`
+        innerelement += ` gltf-model="${clue['typeurl']}"`
       } else if (clue['typeurl']) {
         innerelement += ` href="${clue['typeurl']}"`
       }
       if (clue['position']) {
         innerelement += `position="${clue['position']}"`
+      } else {
+        innerelement += `position="0 0 0"`
       }
       if (clue['scale']){
         innerelement += `scale="${clue['scale']}"`
+      } else {
+        innerelement += `scale="0.05 0.05 0.05"`
       }
       innerelement += `></a-${clue['type']}>`
       var tempDiv = document.createElement('div');
