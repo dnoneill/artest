@@ -18,7 +18,7 @@ Vue.component('arview', {
   	return {
   	    siteclues: {},
   	    text: '',
-  	    currentclue: 0,
+  	    currentclue: {},
   	    highestclue: 100
   	}
   },
@@ -34,7 +34,7 @@ Vue.component('arview', {
   			localforage.setItem('progress', 0)
   		}
   	})
-
+    this.markers();
     const ascene = document.getElementsByTagName("a-scene")[0];
     const camera = document.getElementById('camera')
     for (var i=0; i<this.siteclues.length; i++){
@@ -47,17 +47,10 @@ Vue.component('arview', {
         text.setAttribute('url', clue['marker']);
         text.setAttribute('class', 'clues'); 
         text.setAttribute('type', itemtype); 
+        text.setAttribute('registerevents', '')
         text.appendChild(innerelement);
         ascene.insertBefore(text, camera)
-        var vue = this;
-        text.addEventListener("markerFound", (e)=>{
-          var cluenumb = parseInt(e.target.dataset.indexNumber);
-          this.currentclue = cluenumb;
-          vue.checkClue(e)     
-        })
-        text.addEventListener("markerLost", (e)=>{
-          vue.text = ''
-        })
+        
       } else {        
         innerelement.setAttribute('class', 'clues');
         innerelement.setAttribute('data-index-number', clue['order']); 
@@ -67,12 +60,37 @@ Vue.component('arview', {
     }
   },
   methods: {
+    markers: function() {
+      var vue = this;
+      AFRAME.registerComponent('registerevents', {
+        init: function () {
+          var marker = this.el;
+
+          marker.setAttribute('emitevents', 'true');
+
+          marker.addEventListener('markerFound', function() {
+            const cluenumb = parseInt(marker.dataset.indexNumber);
+            const currentclue = vue.siteclues.filter(element => element['order'] == cluenumb)[0]
+            console.log(currentclue)
+            vue.currentclue = currentclue;
+            vue.checkClue();
+            console.log('markerFound', cluenumb);
+          });
+
+          marker.addEventListener('markerLost', function() {
+            console.log('markerLost');
+            vue.text = '';
+            vue.currentclue = {};
+          });
+        }
+      });
+    },
   	checkClue: function() {
   		var vue = this;
   		localforage.getItem('progress', function (err, value) {
-  			if (vue.currentclue == vue.highestclue) {
+  			if (vue.currentclue['order'] == vue.highestclue) {
   				vue.text = 'FINISHED'
-  			} else if (vue.currentclue > value+1) {
+  			} else if (vue.currentclue['order'] > value+1) {
   				alert(`You have skiped clue #${value+1}`)
   			}else {
   				vue.successClue()
@@ -100,9 +118,8 @@ Vue.component('arview', {
       tempDiv.innerHTML = innerelement;
       return tempDiv.firstChild;
     },
-  	successClue: function(e) {
-  		const html = this.siteclues.filter(element => element['order'] == this.currentclue)[0]
-	    this.text = html['message'];
+  	successClue: function() {
+	    this.text = this.currentclue['message'];
 	    localforage.setItem('progress', this.currentclue)
 	    if (this.apiurl) {
 	    	this.sendData();
