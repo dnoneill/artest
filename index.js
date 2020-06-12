@@ -13,7 +13,7 @@ Vue.config.ignoredElements = [
 
 Vue.component('arview', {
   props: ['apiurl'],
-  template: `<div><a-scene embedded arjs gesture-detector>
+  template: `<div><a-scene embedded arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960" gesture-detector>
   <a-assets>
         <a-asset-item
           id="bowser"
