@@ -6,12 +6,39 @@ Vue.config.ignoredElements = [
    'a-cursor',
    'a-animation',
    'a-entity',
-   'a-link'
+   'a-link',
+   'a-marker',
+   'a-asset-item'
  ]
 
 Vue.component('arview', {
   props: ['apiurl'],
   template: `<div><a-scene embedded arjs gesture-detector>
+  <a-assets>
+        <a-asset-item
+          id="bowser"
+          src="https://cdn.glitch.com/06bd98b4-97ee-4c07-a546-fe39ca205034%2Fbowser.glb"
+        >
+        </a-asset-item>
+      </a-assets>
+
+      <a-marker
+        preset="hiro"
+        raycaster="objects: .clickable"
+        emitevents="true"
+        cursor="fuse: false; rayOrigin: mouse;"
+        id="markerA"
+      >
+        <a-entity
+          id="bowser-model"
+          gltf-model="#bowser"
+          position="0 0 0"
+          scale="0.05 0.05 0.05"
+          class="clickable"
+          gesture-handler
+        >
+        </a-entity>
+      </a-marker>
       <a-entity camera id="camera"></a-entity>
       </a-scene><div id="arview">{{ text }}</div></div>`,
   data: function() {
