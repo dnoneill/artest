@@ -13,7 +13,7 @@ Vue.config.ignoredElements = [
 
 Vue.component('arview', {
   props: ['apiurl'],
-  template: `<div><a-scene embedded arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960" gesture-detector>
+  template: `<div><a-scene embedded arjs="trackingMethod: best;" gesture-detector>
       <a-entity camera id="camera"></a-entity>
       </a-scene><div id="arview">{{ text }}</div></div>`,
   data: function() {
