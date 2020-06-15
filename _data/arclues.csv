@@ -1,3 +1,3 @@
-﻿empty column,viewtype,message,marker,library,type,typeurl,order
-,nft,image test,https://dnoneill.github.io/artest/antlitz.ninja.1569957840550,hill,entity,https://cdn.aframe.io/test-models/models/glTF-2.0/virtualcity/VC.gltf,1
-,nft,world map,https://dnoneill.github.io/artest/2020903_KMS1898,hill,entity,trex.gltf,2
+﻿empty column,viewtype,message,marker,library,type,typeurl,order,scale,position
+,nft,image test,artest/arjs/aframe/examples/image-tracking/nft/trex/trex-image/trex,hill,entity,http://127.0.0.1:4000/artest/trex.gltf,1,5 5 5,50 150 -100
+,nft,world map,artest/2020903_KMS1898,hill,entity,http://127.0.0.1:4000/artest/trex.gltf,2,5 5 5,50 150 -100

@@ -8,12 +8,14 @@ Vue.config.ignoredElements = [
    'a-entity',
    'a-link',
    'a-marker',
-   'a-asset-item'
+   'a-asset-item',
+   'a-box',
+   'a-nft'
  ]
 
 Vue.component('arview', {
   props: ['apiurl'],
-  template: `<div><a-scene embedded arjs="trackingMethod: best;" gesture-detector renderer="logarithmicDepthBuffer: true;">
+  template: `<div><a-scene embedded arjs="sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;" gesture-detector>
       <a-entity camera id="camera"></a-entity>
       </a-scene><div id="arview">{{ text }}</div></div>`,
   data: function() {
@@ -51,9 +53,9 @@ Vue.component('arview', {
         text.setAttribute('type', itemtype); 
         text.setAttribute('registerevents', '');
         text.setAttribute("smooth", "true");
-        // text.setAttribute("smoothCount", "10");
-        // text.setAttribute("smoothTolerance", ".01");
-        // text.setAttribute("smoothThreshold", "5");
+        text.setAttribute("smoothCount", "10");
+        text.setAttribute("smoothTolerance", ".01");
+        text.setAttribute("smoothThreshold", "5");
         text.appendChild(innerelement);
         ascene.insertBefore(text, camera)
       } else {        
