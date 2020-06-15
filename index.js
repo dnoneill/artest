@@ -49,10 +49,10 @@ Vue.component('arview', {
         text.setAttribute('url', clue['marker']);
         text.setAttribute('type', itemtype); 
         text.setAttribute('registerevents', '');
-        // text.setAttribute("smooth", "true");
-        // text.setAttribute("smoothCount", "10");
-        // text.setAttribute("smoothTolerance", ".01");
-        // text.setAttribute("smoothThreshold", "5");
+        text.setAttribute("smooth", "true");
+        text.setAttribute("smoothCount", "10");
+        text.setAttribute("smoothTolerance", ".01");
+        text.setAttribute("smoothThreshold", "5");
         text.appendChild(innerelement);
         ascene.insertBefore(text, camera)
       } else {        
