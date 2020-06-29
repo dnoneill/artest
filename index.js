@@ -104,7 +104,7 @@ Vue.component('arview', {
           marker.addEventListener('markerFound', function() {
             vue.currentclue = vue.getCurrentClue(marker);
             vue.checkClue();
-            console.log('markerFound', cluenumb);
+            console.log('markerFound');
           });
 
           marker.addEventListener('markerLost', function() {
