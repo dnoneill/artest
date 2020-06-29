@@ -80,7 +80,8 @@ Vue.component('arview', {
        return element;
     },
     getCurrentClue: function(marker) {
-      const cluenumb = marker.parentElement.dataset ? marker.parentElement.dataset.indexNumber : marker.dataset.indexNumber;
+      const cluenumb = marker.parentElement.dataset && marker.parentElement.dataset.indexNumber ? marker.parentElement.dataset.indexNumber : marker.dataset.indexNumber;
+      console.log(cluenumb);
       const currentclue = this.siteclues.filter(element => element['order'] == cluenumb)[0];
       return currentclue;
     },
@@ -118,9 +119,9 @@ Vue.component('arview', {
   	checkClue: function() {
   		var vue = this;
   		localforage.getItem('progress', function (err, value) {
-  		  if (vue.currentclue['order'] > value+1) {
+  		  if (vue.currentclue['order'] && vue.currentclue['order'] > value+1) {
   				alert(`You have skiped clue #${value+1}`)
-  			}else {
+  			} else {
   				vue.successClue()
   			}
   		})
