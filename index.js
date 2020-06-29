@@ -14,10 +14,16 @@ Vue.config.ignoredElements = [
  ]
 
 Vue.component('arview', {
-  props: ['apiurl'],
-  template: `<div><a-scene embedded arjs="sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;" gesture-detector>
-      <a-entity camera id="camera"></a-entity>
-      </a-scene><div id="arview">{{ text }}</div></div>`,
+  props: ['apiurl', 'completetext'],
+  template: `<div>
+      <div class="arjs-loader">
+        <div>Loading, please wait...</div>
+      </div>
+      <a-scene embedded arjs="sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;" gesture-detector>
+        <a-entity camera id="camera"></a-entity>
+      </a-scene>
+      <div id="arview">{{ text }}</div>
+      </div>`,
   data: function() {
   	return {
   	    siteclues: {},
@@ -73,8 +79,22 @@ Vue.component('arview', {
        element.setAttribute('gesture-handler', '');
        return element;
     },
+    getCurrentClue: function(marker) {
+      const cluenumb = marker.parentElement.dataset ? marker.parentElement.dataset.indexNumber : marker.dataset.indexNumber;
+      const currentclue = this.siteclues.filter(element => element['order'] == cluenumb)[0];
+      return currentclue;
+    },
     markers: function() {
       var vue = this;
+      AFRAME.registerComponent('clickhandler', {
+        init: function() {
+          var marker = this.el;
+          console.log(marker)
+          this.el.addEventListener('click', () => {
+            vue.currentclue = vue.getCurrentClue(marker);
+            alert(vue.currentclue['message'])
+          });
+      }});
       AFRAME.registerComponent('registerevents', {
         init: function () {
           var marker = this.el;
@@ -82,10 +102,7 @@ Vue.component('arview', {
           // marker.setAttribute('emitevents', 'true');
 
           marker.addEventListener('markerFound', function() {
-            const cluenumb = parseInt(marker.dataset.indexNumber);
-            const currentclue = vue.siteclues.filter(element => element['order'] == cluenumb)[0]
-            console.log(currentclue)
-            vue.currentclue = currentclue;
+            vue.currentclue = vue.getCurrentClue(marker);
             vue.checkClue();
             console.log('markerFound', cluenumb);
           });
@@ -101,9 +118,7 @@ Vue.component('arview', {
   	checkClue: function() {
   		var vue = this;
   		localforage.getItem('progress', function (err, value) {
-  			if (vue.currentclue['order'] == vue.highestclue) {
-  				vue.text = 'FINISHED'
-  			} else if (vue.currentclue['order'] > value+1) {
+  		  if (vue.currentclue['order'] > value+1) {
   				alert(`You have skiped clue #${value+1}`)
   			}else {
   				vue.successClue()
@@ -139,13 +154,16 @@ Vue.component('arview', {
       } else {
         innerelement += `scale="0.05 0.05 0.05"`
       }
-      innerelement += `></a-${clue['type']}>`
+      innerelement += ` clickhandler></a-${clue['type']}>`
       var tempDiv = document.createElement('div');
       tempDiv.innerHTML = innerelement;
       return tempDiv.firstChild;
     },
   	successClue: function() {
 	    this.text = this.currentclue['message'];
+      if (this.currentclue['order'] == this.highestclue) {
+        this.text += ' ' + this.completetext;
+      }
 	    localforage.setItem('progress', this.currentclue)
 	    if (this.apiurl) {
 	    	this.sendData();

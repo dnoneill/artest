@@ -19,7 +19,7 @@ layout: null
 		{{site.data.arclues | jsonify}}
 	</script>
 	<div id="app">
-	<arview apiurl="{{site.apiurl}}"></arview>
+	<arview apiurl="{{site.apiurl}}" completetext="{{site.completetext}}"></arview>
 	</div>
     <script src="index.js"></script>
 </body>
@@ -33,4 +33,23 @@ layout: null
 		right: 50%;
 		position: absolute;
 	}
+
+  .arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .arjs-loader div {
+    text-align: center;
+    font-size: 1.25em;
+    color: white;
+  }
 </style>
