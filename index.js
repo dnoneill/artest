@@ -6,14 +6,24 @@ Vue.config.ignoredElements = [
    'a-cursor',
    'a-animation',
    'a-entity',
-   'a-link'
+   'a-link',
+   'a-marker',
+   'a-asset-item',
+   'a-box',
+   'a-nft'
  ]
 
 Vue.component('arview', {
-  props: ['apiurl'],
-  template: `<div><a-scene embedded arjs>
-      <a-entity camera id="camera"></a-entity>
-      </a-scene><div id="arview">{{ text }}</div></div>`,
+  props: ['apiurl', 'completetext'],
+  template: `<div>
+      <div class="arjs-loader">
+        <div>Loading, please wait...</div>
+      </div>
+      <a-scene embedded arjs="sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960;" gesture-detector>
+        <a-entity camera id="camera"></a-entity>
+      </a-scene>
+      <div id="arview">{{ text }}</div>
+      </div>`,
   data: function() {
   	return {
   	    siteclues: {},
@@ -41,40 +51,61 @@ Vue.component('arview', {
       const clue = this.siteclues[i];
       const innerelement = this.buildInnerElement(clue);
       if (clue['viewtype'] != 'location'){
-        let text = document.createElement(`a-${clue['viewtype']}`);
+        const newelement = document.createElement(`a-${clue['viewtype']}`);
         var itemtype = clue['viewtype'] == 'marker' ? 'pattern' : clue['viewtype'];
-        text.setAttribute('data-index-number', clue['order']); 
+        const text = this.setDefaultValues(newelement, clue);
         text.setAttribute('url', clue['marker']);
-        text.setAttribute('class', 'clues'); 
+        console.log(text)
         text.setAttribute('type', itemtype); 
-        text.setAttribute('registerevents', '')
+        text.setAttribute('registerevents', '');
+        text.setAttribute("smooth", "true");
+        text.setAttribute("smoothCount", "10");
+        text.setAttribute("smoothTolerance", ".01");
+        text.setAttribute("smoothThreshold", "5");
         text.appendChild(innerelement);
         ascene.insertBefore(text, camera)
-        
       } else {        
-        innerelement.setAttribute('class', 'clues');
-        innerelement.setAttribute('data-index-number', clue['order']); 
-        innerelement.setAttribute('gps-entity-place', `latitude: ${clue['latitude']}; longitude: ${clue['longitude']};`)
+        const element = this.setDefaultValues(innerelement, clue);
+        element.setAttribute('gps-entity-place', `latitude: ${clue['latitude']}; longitude: ${clue['longitude']};`)
         ascene.insertBefore(innerelement, camera)
       }
     }
   },
   methods: {
+    setDefaultValues: function(element, clue) {
+       element.setAttribute('emitevents', 'true');
+       element.setAttribute('class', 'clues');
+       element.setAttribute('data-index-number', clue['order']); 
+       element.setAttribute('gesture-handler', '');
+       return element;
+    },
+    getCurrentClue: function(marker) {
+      const cluenumb = marker.parentElement.dataset && marker.parentElement.dataset.indexNumber ? marker.parentElement.dataset.indexNumber : marker.dataset.indexNumber;
+      console.log(cluenumb);
+      const currentclue = this.siteclues.filter(element => element['order'] == cluenumb)[0];
+      return currentclue;
+    },
     markers: function() {
       var vue = this;
+      AFRAME.registerComponent('clickhandler', {
+        init: function() {
+          var marker = this.el;
+          console.log(marker)
+          this.el.addEventListener('click', () => {
+            vue.currentclue = vue.getCurrentClue(marker);
+            alert(vue.currentclue['message'])
+          });
+      }});
       AFRAME.registerComponent('registerevents', {
         init: function () {
           var marker = this.el;
-
-          marker.setAttribute('emitevents', 'true');
+          console.log(marker)
+          // marker.setAttribute('emitevents', 'true');
 
           marker.addEventListener('markerFound', function() {
-            const cluenumb = parseInt(marker.dataset.indexNumber);
-            const currentclue = vue.siteclues.filter(element => element['order'] == cluenumb)[0]
-            console.log(currentclue)
-            vue.currentclue = currentclue;
+            vue.currentclue = vue.getCurrentClue(marker);
             vue.checkClue();
-            console.log('markerFound', cluenumb);
+            console.log('markerFound');
           });
 
           marker.addEventListener('markerLost', function() {
@@ -88,15 +119,22 @@ Vue.component('arview', {
   	checkClue: function() {
   		var vue = this;
   		localforage.getItem('progress', function (err, value) {
-  			if (vue.currentclue['order'] == vue.highestclue) {
-  				vue.text = 'FINISHED'
-  			} else if (vue.currentclue['order'] > value+1) {
+  		  if (vue.currentclue['order'] && vue.currentclue['order'] > value+1) {
   				alert(`You have skiped clue #${value+1}`)
-  			}else {
+  			} else {
   				vue.successClue()
   			}
   		})
-  	},
+  	}, 
+    handleRotation(event) {
+      console.log('handleRotation')
+      console.log(event)
+      el.object3D.rotation.y +=
+        event.detail.positionChange.x * rotationFactor;
+
+      el.object3D.rotation.x +=
+        event.detail.positionChange.y * rotationFactor;
+    },
   	sendData: function() {
   		alert('sendData')
   	},
@@ -109,17 +147,24 @@ Vue.component('arview', {
       }
       if (clue['position']) {
         innerelement += `position="${clue['position']}"`
+      } else {
+        innerelement += `position="0 0 0"`
       }
       if (clue['scale']){
         innerelement += `scale="${clue['scale']}"`
+      } else {
+        innerelement += `scale="0.05 0.05 0.05"`
       }
-      innerelement += `></a-${clue['type']}>`
+      innerelement += ` clickhandler></a-${clue['type']}>`
       var tempDiv = document.createElement('div');
       tempDiv.innerHTML = innerelement;
       return tempDiv.firstChild;
     },
   	successClue: function() {
 	    this.text = this.currentclue['message'];
+      if (this.currentclue['order'] == this.highestclue) {
+        this.text += ' ' + this.completetext;
+      }
 	    localforage.setItem('progress', this.currentclue)
 	    if (this.apiurl) {
 	    	this.sendData();
